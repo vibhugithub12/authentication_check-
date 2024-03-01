@@ -1,0 +1,17 @@
+.signupForm{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(206, 227, 173);
+    height: 200px;
+    flex-direction: column;
+}
+
+.logout{
+    position: fixed;
+    right: 20px;
+    top: 20px;
+}
+form input{
+    margin: 10px;
+}

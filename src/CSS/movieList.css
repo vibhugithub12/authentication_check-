@@ -1,0 +1,13 @@
+.addMovie{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(176, 233, 214);
+}
+
+.movieLists{
+    background-color: aliceblue;
+}
+.movieLists h1{
+    margin: 0;
+}
