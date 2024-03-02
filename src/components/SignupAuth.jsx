@@ -18,6 +18,7 @@ const SignupAuth = () =>{
         e.preventDefault();
         try{
         await createUserWithEmailAndPassword(auth,emails,passwords);
+        setCurrUser(auth.currentUser.email);
         }catch(err){
             // console.error(err);
             alert(err);
@@ -30,31 +31,37 @@ const SignupAuth = () =>{
     const SignInWithGoogle=async()=>{
         try{
             await signInWithPopup(auth,googleProvider);
+            setCurrUser(auth.currentUser.email);
             }catch(err){
                 // console.error(err);
                 alert(err);
             }
+            
     }
 
-    const currUser=auth.currentUser?.email;
+    const [currUser,setCurrUser]=useState(auth.currentUser?auth.currentUser.email:"user");
+
     const logoutButton=async()=>{
         try{
             await signOut(auth);
+            setCurrUser("user");
             }catch(err){
                 // console.error(err);
                 alert(err);
             }
     }
 
-        useEffect(()=>{
-            
-        },SignInWithGoogle)
+    useEffect(()=>{
+        
+    },[])
+
+    
 
     return(
         <>
         <div className="signupForm">
             <div>
-                <h1>Hello</h1>{currUser?currUser:""}
+                <h1>Hello {currUser}</h1>
                 <button className="logout" onClick={logoutButton}>Logout</button>
                 <form action="" onSubmit={handleSubmit}>
                 <input type="email" placeholder="Enter email" onChange={(e)=>{setEmail(e.target.value)}}/>
