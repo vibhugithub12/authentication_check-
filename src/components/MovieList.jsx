@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import '../CSS/movieList.css';
-import {db} from "../firebase/config";
+import {db,auth,storage} from "../firebase/config";
 import { getDocs,collection, addDoc,deleteDoc, doc,updateDoc} from "firebase/firestore";
+import { ref,uploadBytes } from "firebase/storage";
+
 
 const MovieList=()=>{
     const [movies,setMovies]=useState([]);
@@ -15,6 +17,10 @@ const MovieList=()=>{
     const [updatedTitle,setUpdatedTitle]=useState("");
     const moviesCollectionRef=collection(db,"movies");
 
+
+    // File upload states
+    const [fileUpload,setFileUpload]=useState(null);
+
     // getting movie list from firestore collection
     
     const onSubmitMovie=async(e)=>{
@@ -25,11 +31,13 @@ const MovieList=()=>{
                 Title:newMovie,
                 releaseDate:newReleaseDate,
                 RecommendToWatch:newMovieRecommended,
-                Ratings:newRatings,});
+                Ratings:newRatings,
+                userId:auth?.currentUser?.uid, 
+            });
                
             }
         catch(err){
-            console.error(err);
+            alert(err);
         }
         };
     
@@ -49,7 +57,7 @@ const MovieList=()=>{
                 setMovies(filteredData);
             }catch(err){
                 // console.error(err);
-                alert("Some error in getting movies");
+                console.log("Some error in getting movies");
             }
         };
 
@@ -70,6 +78,20 @@ const MovieList=()=>{
             const movieDoc=doc(db,"movies",id) ;
             await updateDoc(movieDoc,{Title:updatedTitle})
         }
+
+
+
+    // Function for movie upload
+
+    const uploadFile=async()=>{
+        if(!fileUpload) return;  // if there is no file, return, because we dont want to send empty file to storage.
+        const filesFolderRef=ref(storage,`projectFiles/${fileUpload.name}`);
+        try{
+        await uploadBytes(filesFolderRef,fileUpload);
+        }catch(err){
+            alert(err);
+        }
+    }
     return(
         <>
         <div >
@@ -95,6 +117,12 @@ const MovieList=()=>{
                 <hr/>
             </div>
         ))}
+        </div>
+
+            {/* For file upload */}
+        <div>
+            <input type="file" onChange={(e)=>setFileUpload(e.target.files[0])}/>
+            <button onClick={uploadFile}>Upload File</button>
         </div>
         </>
     );

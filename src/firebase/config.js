@@ -4,6 +4,9 @@ import { initializeApp } from "firebase/app";
 import {getAuth,GoogleAuthProvider} from 'firebase/auth';
 import {getFirestore} from 'firebase/firestore';
 
+// To use Storage from firebase to store files/images
+import {getStorage} from 'firebase/storage';
+
 const firebaseConfig = {
   apiKey: "AIzaSyBr3ByI1DkOPW22HIGedR4SvZx71jgnA_o",
   authDomain: "authentication-managemen-cd633.firebaseapp.com",
@@ -20,3 +23,5 @@ const app = initializeApp(firebaseConfig);
 export const auth=getAuth(app);
 export const googleProvider=new GoogleAuthProvider();
 export const db=getFirestore(app);
+
+export const storage=getStorage(app);
